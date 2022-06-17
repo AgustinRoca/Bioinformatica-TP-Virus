@@ -63,10 +63,6 @@ def get_all_proteins_by_orf(record: SeqRecord) -> dict:
 def get_len_protein(prot_tuple):
     return len(prot_tuple[0])
 
-def get_percentage_of_genome_used(proteins, genome_length):
-    length = sum(len(s) for s in proteins)
-    return length/genome_length
-
 # TODO: Be able to change gb_file path and output by command line
 if __name__ == '__main__':
     gb_file = 'sequences/unknown_virus.gb'
@@ -79,18 +75,12 @@ if __name__ == '__main__':
         for orf,proteins_in_orf in proteins.items():
             for protein in proteins_in_orf:
                 if len(protein)*3/len(gb_record.seq) > 0.01:
-                    # print(f"{orf}: {len(protein)*3/len(gb_record.seq) * 100}% of gen used for protein")
                     all_proteins.append((protein, orf))
 
-    for orf in ['+1', '+2', '+3', '-1', '-2', '-3']:
-        print(f"Number of proteins in ORF {orf}: {len(proteins[orf])}")
-        print(f"Genome used in ORF {orf}: {get_percentage_of_genome_used(proteins[orf], len(gb_record.seq)) * 100:.2f}%")
-        print()
     chosen_proteins = sorted(all_proteins, key=get_len_protein, reverse=True)[:10]
     records = []
     for i, (protein, orf) in enumerate(chosen_proteins):
-        # print(f"{orf}: {len(protein)*3/len(gb_record.seq) * 100}% of gen used for protein")
-        # print(len(protein))
+        print(f"{orf}: {len(protein)*3/len(gb_record.seq) * 100:.2f}% of gen used for protein")
         selected_protein = protein
         record = SeqRecord(protein, description=f'Protein #{i+1} translated from {gb_record.id} from ORF {orf}.')
         records.append(record)
