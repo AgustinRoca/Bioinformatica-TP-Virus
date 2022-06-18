@@ -74,10 +74,10 @@ if __name__ == '__main__':
         all_proteins = []
         for orf,proteins_in_orf in proteins.items():
             for protein in proteins_in_orf:
-                if len(protein)*3/len(gb_record.seq) > 0.01:
+                if len(protein) > 10:
                     all_proteins.append((protein, orf))
 
-    chosen_proteins = sorted(all_proteins, key=get_len_protein, reverse=True)[:10]
+    chosen_proteins = sorted(all_proteins, key=get_len_protein, reverse=True)
     records = []
     for i, (protein, orf) in enumerate(chosen_proteins):
         print(f"{orf}: {len(protein)*3/len(gb_record.seq) * 100:.2f}% of gen used for protein")
